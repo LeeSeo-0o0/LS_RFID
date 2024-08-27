@@ -50,6 +50,9 @@ NFC 카드 설정: NFC 카드에 localhost/redirect.php?id=사용자ID 형식의
 📧 문의<br/>
 프로젝트에 대한 문의는 help@leeseo.kr으로 연락해 주세요.<br/>
 
+1.1버전
+![image](https://github.com/user-attachments/assets/cd54ec26-6c3c-4869-8c55-bc69219e638b)
+
+1.0 버전
 ![image](https://github.com/user-attachments/assets/88983ee6-9f22-424b-8215-32b39fae2f70)
 ![image](https://github.com/user-attachments/assets/c166410b-0f4c-43a7-bca7-97e01ccec34d)
-
