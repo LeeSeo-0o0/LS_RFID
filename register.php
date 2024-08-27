@@ -8,25 +8,48 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// URL에서 card_id 가져오기
-$card_id = $_GET['id'];
+// 사용자 등록 처리
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $company = $_POST['company'];
+    $title = $_POST['title'];
+    $card_id = $_POST['card_id'];
 
-// 데이터베이스에서 해당 card_id의 URL 조회
-$sql = "SELECT card_id FROM users WHERE card_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $card_id);
-$stmt->execute();
-$result = $stmt->get_result();
+    // 사용자 정보 삽입
+    $sql = "INSERT INTO users (name, email, phone, company, title, card_id) 
+            VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssss", $name, $email, $phone, $company, $title, $card_id);
 
-if ($result->num_rows > 0) {
-    // card_id가 존재하면, 해당 명함 페이지로 리디렉션
-    header("Location: card.php?id=" . $card_id);
-    exit();
-} else {
-    // card_id가 존재하지 않으면 에러 메시지 출력
-    echo "No business card found for this ID.";
+    if ($stmt->execute()) {
+        echo "User registered successfully.";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 
-$stmt->close();
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registration</title>
+</head>
+<body>
+    <h2>Register a New Business Card</h2>
+    <form method="post" action="register.php">
+        Name: <input type="text" name="name" required><br>
+        Email: <input type="email" name="email" required><br>
+        Phone: <input type="text" name="phone"><br>
+        Company: <input type="text" name="company"><br>
+        Title: <input type="text" name="title"><br>
+        Card ID: <input type="text" name="card_id" required><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

@@ -10,7 +10,7 @@ if ($conn->connect_error) {
 
 // URL에서 card_id 가져오기
 $card_id = $_GET['id'];
-
+ 
 // 데이터베이스에서 명함 정보 조회
 $sql = "SELECT name, email, phone, company, title FROM users WHERE card_id = ?";
 $stmt = $conn->prepare($sql);
