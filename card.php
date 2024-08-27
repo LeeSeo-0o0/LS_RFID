@@ -21,8 +21,9 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 } else {
-    echo "No business card found for this ID.";
-    exit();
+    // 명함 정보를 찾을 수 없을 때 표시할 메시지
+    $error_message = "No business card found for this ID.";
+    $user = null; // 명함 정보가 없음을 나타내기 위해 null로 설정
 }
 
 $stmt->close();
@@ -34,11 +35,12 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $user['name']; ?>의 디지털 명함</title>
+    <title><?php echo $user ? $user['name'] . "의 디지털 명함" : "명함을 찾을 수 없습니다"; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
+        <?php if ($user) : ?>
         <div class="card">
             <div class="card-body text-center">
                 <h2 class="card-title"><?php echo $user['name']; ?></h2>
@@ -51,6 +53,14 @@ $conn->close();
                 </div>
             </div>
         </div>
+        <?php else : ?>
+        <div class="alert alert-danger text-center" role="alert">
+            <h4 class="alert-heading">명함을 찾을 수 없습니다!</h4>
+            <p><?php echo $error_message; ?></p>
+            <hr>
+            <p class="mb-0">ID를 다시 확인해 주세요.</p>
+        </div>
+        <?php endif; ?>
     </div>
 
     <script>
