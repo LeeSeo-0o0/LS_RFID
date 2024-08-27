@@ -18,33 +18,52 @@ if (!file_exists('dbconfig.php')) {
         $config_content .= "define('DB_NAME', '$dbname');\n";
         $config_content .= "?>";
 
-        file_put_contents('dbconfig.php', $config_content);
+        if (file_put_contents('dbconfig.php', $config_content) !== false) {
+            // 데이터베이스 연결 및 테이블 생성
+            $conn = new mysqli($servername, $username, $password, $dbname);
 
-        // 데이터베이스 연결 및 관리자 테이블 생성
-        $conn = new mysqli($servername, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            // 관리자 테이블 생성
+            $sql_admins = "CREATE TABLE IF NOT EXISTS admins (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL
+            )";
+            if ($conn->query($sql_admins) === TRUE) {
+                // 관리자 계정 생성
+                $sql_insert_admin = "INSERT INTO admins (username, password) VALUES (?, ?)";
+                $stmt = $conn->prepare($sql_insert_admin);
+                $stmt->bind_param("ss", $admin_username, $admin_password);
+                $stmt->execute();
+                $stmt->close();
+            } else {
+                echo "Error creating admins table: " . $conn->error;
+                exit();
+            }
+
+            // users 테이블 생성
+            $sql_users = "CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                phone VARCHAR(20),
+                company VARCHAR(255),
+                title VARCHAR(255),
+                card_id VARCHAR(255) UNIQUE NOT NULL
+            )";
+            if ($conn->query($sql_users) === TRUE) {
+                echo "Database configuration saved, tables created, and admin account created successfully. Please <a href='admin.php'>login</a>.";
+            } else {
+                echo "Error creating users table: " . $conn->error;
+            }
+
+            $conn->close();
+        } else {
+            echo "Failed to create dbconfig.php file.";
         }
-
-        // 관리자 테이블 생성
-        $sql = "CREATE TABLE IF NOT EXISTS admins (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            username VARCHAR(255) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL
-        )";
-        $conn->query($sql);
-
-        // 관리자 계정 생성
-        $sql = "INSERT INTO admins (username, password) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $admin_username, $admin_password);
-        $stmt->execute();
-
-        $stmt->close();
-        $conn->close();
-
-        echo "Database configuration saved and admin account created successfully. Please <a href='admin.php'>login</a>.";
         exit();
     }
 } else {
@@ -75,3 +94,4 @@ if (!file_exists('dbconfig.php')) {
     </form>
 </body>
 </html>
+
