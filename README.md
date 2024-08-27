@@ -12,6 +12,7 @@
 ## 🛠️ 설치 방법
 
 1. 이 저장소를 클론합니다:
+
    ```bash
    git clone https://github.com/LeeSeo-0o0/LS_RFID.git
 프로젝트 디렉토리로 이동합니다:
@@ -31,7 +32,7 @@ cd LS_RFID
 NFC 카드 설정: NFC 카드에 localhost/redirect.php?id=사용자ID 형식의 URL을 기록합니다.
 명함 페이지 접속: NFC 카드를 스캔하면 자동으로 해당 사용자의 명함 페이지로 이동됩니다.
 📂 프로젝트 구조
-
+plaintext
 코드 복사
 📁 프로젝트 루트
 ├── 📄 index.php          # 초기 설정 및 관리자 계정 생성 페이지
