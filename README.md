@@ -53,6 +53,7 @@ NFC 카드 설정: NFC 카드에 localhost/redirect.php?id=사용자ID 형식의
 1.1버전
 ![image](https://github.com/user-attachments/assets/cd54ec26-6c3c-4869-8c55-bc69219e638b)
 ![image](https://github.com/user-attachments/assets/8ff06141-6a1f-4c89-aef5-e6154eb831dd)
+![용
 
 
 1.0 버전
